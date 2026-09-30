@@ -1,0 +1,83 @@
+# go-fgis-api
+
+Go-клиент для списков деклараций и сертификатов публичного реестра ФГИС Росаккредитации. Зависимостей кроме стандартной библиотеки Go нет.
+
+## Авторизация
+
+Клиент воспроизводит поток, наблюдавшийся в HAR: открывает страницу реестра и получает `session-cookie`, отправляет `POST /login` с cookie и JSON `username/password`, затем забирает Bearer из заголовка `Authorization` ответа. Тот же cookie jar и Bearer используются при запросах к API. Учётные данные и токен хранятся только в памяти клиента.
+
+## Использование
+
+```go
+client, err := fgis.New(fgis.Config{
+    Username: os.Getenv("FGIS_USERNAME"),
+    Password: os.Getenv("FGIS_PASSWORD"),
+})
+if err != nil {
+    return err
+}
+defer client.Close()
+
+query := fgis.DefaultDeclarationSearchRequest()
+query.Page = 0
+page, err := client.SearchDeclarations(ctx, query)
+if err != nil {
+    return err
+}
+for _, declaration := range page.Items {
+    fmt.Println(declaration.DeclarationNumber)
+}
+```
+
+`SearchDeclarations` авторизуется при первом вызове. Строки ответа описаны типом `Declaration`; общая обёртка списка — `Page[T]`.
+
+Для долгоживущего процесса запустите фоновое обновление:
+
+```go
+client, err := fgis.New(fgis.Config{
+    CredentialsProvider: func(ctx context.Context) (fgis.Credentials, error) {
+        return secrets.FGISCredentials(ctx)
+    },
+    RefreshBefore: 5 * time.Minute,
+})
+if err != nil {
+    return err
+}
+if err := client.Start(processCtx); err != nil {
+    return err
+}
+defer client.Close()
+```
+
+`Start` делает первый вход и запускает один фоновый цикл. `Close` останавливает его и запрещает новые запросы. При отмене `processCtx` цикл тоже останавливается. Повторный `Start` не создаёт ещё один цикл. Клиент безопасен для одновременных вызовов.
+
+JWT `exp` определяет момент следующего входа, по умолчанию за пять минут до истечения. Если `exp` нет, обновление происходит через час. После временной ошибки входа цикл повторяет попытку через 30 секунд; ранее полученный токен сохраняется до истечения. Запросы также обновляют токен при необходимости и один раз повторяют запрос после HTTP 401. Для смены пароля в работающем процессе передайте `CredentialsProvider`.
+
+Ошибки фонового обновления можно получать через `Config.OnRefreshError`. Обработчик вызывается из фонового цикла, поэтому он должен быстро завершаться и не вызывать `Close` синхронно.
+
+## Сертификаты
+
+Для сертификатов доступен `SearchCertificates(ctx, CertificateSearchRequest)`. Подтверждён маршрут `POST /api/v1/rss/common/certificates/get`, но приложенный HAR не содержал тело этого запроса и ответ. Поэтому `CertificateSearchRequest.Filter` — расширяемый `map[string]any`, а поля строки сертификата — `map[string]json.RawMessage`. Типизировать их без реального ответа было бы гаданием. Для отдельного клиента сертификатов можно указать `StartPath: "/rss/certificate"`.
+
+## Границы
+
+- Схема фильтра деклараций и поля `Declaration` взяты из приложенного HAR. Пустой запрос первой страницы создаёт `DefaultDeclarationSearchRequest()`.
+- `exp` декодируется только для планирования обновления; криптографическая подпись JWT не проверяется клиентом.
+- Ошибки HTTP содержат метод, путь и статус, но не тело ответа, где могут быть персональные данные.
+- Это воспроизведение браузерного обмена, а не документированный публичный контракт ФГИС: маршруты и поля могут измениться.
+
+## Тесты
+
+```sh
+go test ./...
+```
+
+Обычный запуск использует HTTP-ответы в памяти и не обращается к ФГИС. GitHub Actions выполняет именно его и явно задаёт `FGIS_LIVE_TEST=0`.
+
+Отдельный тест настоящего API запускается только по запросу. Задайте `FGIS_USERNAME` и `FGIS_PASSWORD` через окружение или менеджер секретов, затем выполните:
+
+```sh
+FGIS_LIVE_TEST=1 go test -run '^TestLiveDeclarationsAPI$' -count=1 -v ./...
+```
+
+Тест открывает страницу деклараций, проходит `/login` и проверяет, что API вернул хотя бы одну запись. Учётные данные не зашиты в код и не используются в CI.
