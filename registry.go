@@ -55,6 +55,9 @@ func requestJSON[T any](ctx context.Context, c *Client, method, path, referer st
 	if c.closed.Load() {
 		return result, ErrClosed
 	}
+	if err := ctx.Err(); err != nil {
+		return result, err
+	}
 	var payload []byte
 	if body != nil {
 		var err error
@@ -68,6 +71,9 @@ func requestJSON[T any](ctx context.Context, c *Client, method, path, referer st
 		return result, err
 	}
 	for attempt := 0; attempt < 2; attempt++ {
+		if err := ctx.Err(); err != nil {
+			return result, err
+		}
 		var reqBody io.Reader
 		if payload != nil {
 			reqBody = bytes.NewReader(payload)
