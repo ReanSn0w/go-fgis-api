@@ -27,29 +27,45 @@ func (c *Client) SearchCertificateSummaries(ctx context.Context, query Certifica
 }
 
 func postList[T any](ctx context.Context, c *Client, path, referer string, query any) (Page[T], error) {
-	var result Page[T]
+	return requestJSON[Page[T]](ctx, c, http.MethodPost, path, referer, query)
+}
+
+// requestJSON is shared by list, detail and dictionary reads. A request body
+// is present only for POST; GET requests never send the JSON literal null.
+func requestJSON[T any](ctx context.Context, c *Client, method, path, referer string, body any) (T, error) {
+	var result T
 	if c.closed.Load() {
 		return result, ErrClosed
 	}
-	payload, err := json.Marshal(query)
-	if err != nil {
-		return result, fmt.Errorf("encode search request: %w", err)
+	var payload []byte
+	if body != nil {
+		var err error
+		payload, err = json.Marshal(body)
+		if err != nil {
+			return result, fmt.Errorf("encode FGIS request: %w", err)
+		}
 	}
 	token, err := c.ensureToken(ctx)
 	if err != nil {
 		return result, err
 	}
 	for attempt := 0; attempt < 2; attempt++ {
-		req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.endpoint(path), bytes.NewReader(payload))
+		var reqBody io.Reader
+		if payload != nil {
+			reqBody = bytes.NewReader(payload)
+		}
+		req, err := http.NewRequestWithContext(ctx, method, c.endpoint(path), reqBody)
 		if err != nil {
-			return result, fmt.Errorf("create search request: %w", err)
+			return result, fmt.Errorf("create FGIS request: %w", err)
 		}
 		setBrowserHeaders(req, c.base, c.endpoint(referer))
 		req.Header.Set("Authorization", token)
-		req.Header.Set("Content-Type", "application/json")
+		if payload != nil {
+			req.Header.Set("Content-Type", "application/json")
+		}
 		resp, err := c.httpClient.Do(req)
 		if err != nil {
-			return result, fmt.Errorf("send search request: %w", err)
+			return result, fmt.Errorf("send FGIS request: %w", err)
 		}
 		if resp.StatusCode == http.StatusUnauthorized && attempt == 0 {
 			_, _ = io.Copy(io.Discard, resp.Body)
@@ -63,17 +79,24 @@ func postList[T any](ctx context.Context, c *Client, path, referer string, query
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			_, _ = io.Copy(io.Discard, resp.Body)
 			_ = resp.Body.Close()
-			return result, &HTTPError{Method: http.MethodPost, Path: path, StatusCode: resp.StatusCode}
+			return result, &HTTPError{Method: method, Path: path, StatusCode: resp.StatusCode}
 		}
 		err = json.NewDecoder(resp.Body).Decode(&result)
 		closeErr := resp.Body.Close()
 		if err != nil {
-			return result, fmt.Errorf("decode FGIS list response: %w", err)
+			return result, fmt.Errorf("decode FGIS response: %w", err)
 		}
 		if closeErr != nil {
 			return result, fmt.Errorf("close FGIS list response: %w", closeErr)
 		}
 		return result, nil
 	}
-	return result, fmt.Errorf("FGIS list retry exhausted")
+	return result, fmt.Errorf("FGIS request retry exhausted")
+}
+
+func detailPath(prefix string, id int64) (string, error) {
+	if id <= 0 {
+		return "", fmt.Errorf("FGIS detail ID must be positive: %d", id)
+	}
+	return fmt.Sprintf("%s/%d", prefix, id), nil
 }
