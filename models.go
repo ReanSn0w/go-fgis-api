@@ -1,6 +1,9 @@
 package fgis
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // Page is the envelope returned by both registry list endpoints.
 type Page[T any] struct {
@@ -36,6 +39,20 @@ type DeclarationFilter struct {
 	RegDate          DateRange         `json:"regDate"`
 	EndDate          DateRange         `json:"endDate"`
 	ColumnsSearch    []json.RawMessage `json:"columnsSearch"`
+}
+
+// DeclarationColumnSearch is the text-column filter used by the declaration
+// registry. The certificate registry uses a different JSON shape.
+type DeclarationColumnSearch struct {
+	Name   string `json:"name"`
+	Search string `json:"search"`
+	Type   int    `json:"type"`
+}
+
+// AddColumnSearch appends a typed condition to the existing raw filter API.
+func (f *DeclarationFilter) AddColumnSearch(condition DeclarationColumnSearch) {
+	encoded, _ := json.Marshal(condition)
+	f.ColumnsSearch = append(f.ColumnsSearch, encoded)
 }
 
 type DeclarationSearchRequest struct {
@@ -79,6 +96,7 @@ type Declaration struct {
 	SRD                                bool   `json:"srd"`
 	Number                             string `json:"number"`
 	DeclarationNumber                  string `json:"declNumber"`
+	DeclarationReplacedNumber          string `json:"declReplacedNumber"`
 	DeclarationTempNumber              string `json:"declTempNumber"`
 	CustomDeclarationNumber            string `json:"customDeclNumber"`
 	DocumentDeclarationNumber          string `json:"documentDeclarationNumber"`
@@ -145,3 +163,117 @@ type CertificateSearchRequest struct {
 // Certificate holds the raw fields returned by a certificate list row until
 // a real certificate response can establish their names and types.
 type Certificate map[string]json.RawMessage
+
+// CertificateSummary is the observed certificate list-row schema. Nullable
+// replacement numbers remain pointers so null is not mistaken for an empty
+// number. The upstream API spells manufacturer keys "manufacter".
+type CertificateSummary struct {
+	ID                                      int     `json:"id"`
+	IDRALCertificationAuthority             int     `json:"idRalCertificationAuthority"`
+	IDStatus                                int     `json:"idStatus"`
+	Number                                  string  `json:"number"`
+	BlankNumber                             string  `json:"blankNumber"`
+	Date                                    string  `json:"date"`
+	EndDate                                 string  `json:"endDate"`
+	CertificateType                         string  `json:"certType"`
+	CertificateObjectType                   string  `json:"certObjectType"`
+	CertificateRegInsteadNumber             *string `json:"certRegInsteadNumber"`
+	CertificateReplacedNumber               *string `json:"certReplacedNumber"`
+	CertificationAuthorityAttestatRegNumber string  `json:"certificationAuthorityAttestatRegNumber"`
+	ApplicantName                           string  `json:"applicantName"`
+	ApplicantOPF                            string  `json:"applicantOpf"`
+	ApplicantType                           string  `json:"applicantType"`
+	ApplicantLegalSubjectType               string  `json:"applicantLegalSubjectType"`
+	ApplicantFilialFullNames                string  `json:"applicantFilialFullNames"`
+	ManufacturerName                        string  `json:"manufacterName"`
+	ManufacturerOPF                         string  `json:"manufacterOpf"`
+	ManufacturerType                        string  `json:"manufacterType"`
+	ManufacturerLegalSubjectType            string  `json:"manufacterLegalSubjectType"`
+	ManufacturerFilialFullNames             string  `json:"manufacterFilialFullNames"`
+	ExpertName                              string  `json:"expertFio"`
+	ExpertSNILS                             string  `json:"expertSnils"`
+	Group                                   string  `json:"group"`
+	ProductBatchSize                        string  `json:"productBatchSize"`
+	ProductFullName                         string  `json:"productFullName"`
+	ProductIdentificationArticle            string  `json:"productIdentificationArticle"`
+	ProductIdentificationGTIN               string  `json:"productIdentificationGtin"`
+	ProductIdentificationModel              string  `json:"productIdentificationModel"`
+	ProductIdentificationName               string  `json:"productIdentificationName"`
+	ProductIdentificationSort               string  `json:"productIdentificationSort"`
+	ProductIdentificationTrademark          string  `json:"productIdentificationTrademark"`
+	ProductIdentificationType               string  `json:"productIdentificationType"`
+	ProductOrigin                           string  `json:"productOrig"`
+	RecordSign                              string  `json:"recordSign"`
+	TechnicalReglaments                     string  `json:"technicalReglaments"`
+}
+
+// CertificateColumnSearch uses the certificate registry's column/search
+// shape; it has no declaration-style name/type fields.
+type CertificateColumnSearch struct {
+	Column string `json:"column"`
+	Search string `json:"search"`
+}
+
+// CertificateDateRange sends explicit nulls for unset bounds, as observed in
+// the certificate list request. The server format for nonempty bounds is not
+// yet confirmed.
+type CertificateDateRange struct {
+	StartDate *string `json:"startDate"`
+	EndDate   *string `json:"endDate"`
+}
+
+// CertificateFilter models only confirmed fields. Extra allows callers to
+// supply other upstream filters without letting them replace known fields.
+type CertificateFilter struct {
+	Status           []int                      `json:"status,omitempty"`
+	IDCertType       []int                      `json:"idCertType,omitempty"`
+	IDCertObjectType []int                      `json:"idCertObjectType,omitempty"`
+	IDCertScheme     []int                      `json:"idCertScheme"`
+	RegDate          CertificateDateRange       `json:"regDate"`
+	EndDate          CertificateDateRange       `json:"endDate"`
+	ColumnsSearch    []CertificateColumnSearch  `json:"columnsSearch"`
+	Extra            map[string]json.RawMessage `json:"-"`
+}
+
+func (f CertificateFilter) MarshalJSON() ([]byte, error) {
+	type known CertificateFilter
+	base, err := json.Marshal(known(f))
+	if err != nil {
+		return nil, err
+	}
+	if len(f.Extra) == 0 {
+		return base, nil
+	}
+	var merged map[string]json.RawMessage
+	if err := json.Unmarshal(base, &merged); err != nil {
+		return nil, err
+	}
+	for key, value := range f.Extra {
+		switch key {
+		case "status", "idCertType", "idCertObjectType", "idCertScheme", "regDate", "endDate", "columnsSearch":
+			return nil, fmt.Errorf("reserved certificate filter field %q", key)
+		}
+		merged[key] = value
+	}
+	return json.Marshal(merged)
+}
+
+// CertificateQuery is the typed certificate search request. Unlike the
+// declaration request, it has no count field.
+type CertificateQuery struct {
+	Size        int               `json:"size"`
+	Page        int               `json:"page"`
+	Filter      CertificateFilter `json:"filter"`
+	ColumnsSort []ColumnSort      `json:"columnsSort"`
+}
+
+func DefaultCertificateQuery() CertificateQuery {
+	return CertificateQuery{
+		Size: 10,
+		Filter: CertificateFilter{
+			IDCertScheme:  []int{},
+			ColumnsSearch: []CertificateColumnSearch{},
+		},
+		ColumnsSort: []ColumnSort{{Column: "date", Sort: "DESC"}},
+	}
+}

@@ -20,6 +20,12 @@ func (c *Client) SearchCertificates(ctx context.Context, query CertificateSearch
 	return postList[Certificate](ctx, c, certificates, "/rss/certificate", query)
 }
 
+// SearchCertificateSummaries returns typed rows using the confirmed certificate
+// query shape. SearchCertificates remains available for raw fields.
+func (c *Client) SearchCertificateSummaries(ctx context.Context, query CertificateQuery) (Page[CertificateSummary], error) {
+	return postList[CertificateSummary](ctx, c, certificates, "/rss/certificate", query)
+}
+
 func postList[T any](ctx context.Context, c *Client, path, referer string, query any) (Page[T], error) {
 	var result Page[T]
 	if c.closed.Load() {
