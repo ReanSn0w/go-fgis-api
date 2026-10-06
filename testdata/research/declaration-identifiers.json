@@ -1,0 +1,761 @@
+{
+  "activeId": 1,
+  "addrTypes": {
+    "locationAddress": {
+      "id": 1,
+      "name": "example"
+    },
+    "placeOfBusiness": {
+      "id": 1,
+      "name": "example"
+    },
+    "residenceAddress": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "annexTypes": {
+    "documentAnnex": {
+      "id": 1,
+      "name": "example"
+    },
+    "freeFormAnnex": {
+      "id": 1,
+      "name": "example"
+    },
+    "manufacturerAnnex": {
+      "id": 1,
+      "name": "example"
+    },
+    "productAnnex": {
+      "id": 1,
+      "name": "example"
+    },
+    "standardAnnex": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "applicantTypes": {
+    "contractor": {
+      "id": 1,
+      "name": "example"
+    },
+    "manufacturer": {
+      "id": 1,
+      "name": "example"
+    },
+    "manufacturerAuthorizedPerson": {
+      "id": 1,
+      "name": "example"
+    },
+    "supplier": {
+      "id": 1,
+      "name": "example"
+    },
+    "vendor": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "canceledId": 1,
+  "contactType": {
+    "email": {
+      "id": 1,
+      "name": "example"
+    },
+    "fax": {
+      "id": 1,
+      "name": "example"
+    },
+    "headPhone": {
+      "id": 1,
+      "name": "example"
+    },
+    "phone": {
+      "id": 1,
+      "name": "example"
+    },
+    "site": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "countryCode": {
+    "codeRF": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "declObjectTypes": {
+    "batchProduction": {
+      "id": 1,
+      "name": "example"
+    },
+    "seriesProduction": {
+      "id": 1,
+      "name": "example"
+    },
+    "singleProduction": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "declScheme": {
+    "vpDeclScheme": {
+      "accreditationLab": false,
+      "actual": false,
+      "applicantEeuMember": false,
+      "applicantForeign": false,
+      "applicantManufacturer": false,
+      "applicantPerformer": false,
+      "applicantProvider": false,
+      "batchProductTesting": false,
+      "batchProduction": false,
+      "icProductSampleTesting": false,
+      "icProductionAnalysis": false,
+      "icQmsValidation": false,
+      "id": 1,
+      "isAccreditationLab": false,
+      "isActual": false,
+      "isApplicantEeuMember": false,
+      "isApplicantForeign": false,
+      "isApplicantManufacturer": false,
+      "isApplicantPerformer": false,
+      "isApplicantProvider": false,
+      "isBatchProductTesting": false,
+      "isBatchProduction": false,
+      "isIcProductSampleTesting": false,
+      "isIcProductionAnalysis": false,
+      "isIcQmsValidation": false,
+      "isOneOffProductTesting": false,
+      "isOneOffProduction": false,
+      "isPresenceOfProxy": false,
+      "isProductSampleTesting": false,
+      "isSeriesProduction": false,
+      "name": "example",
+      "normDocId": null,
+      "oneOffProductTesting": false,
+      "oneOffProduction": false,
+      "presenceOfProxy": false,
+      "productSampleTesting": false,
+      "seriesProduction": false,
+      "validationFormId": null,
+      "validityTerm": null
+    }
+  },
+  "declType": {
+    "epEaes": {
+      "id": 1,
+      "name": "example",
+      "shortName": null
+    },
+    "epRf": {
+      "id": 1,
+      "name": "example",
+      "shortName": null
+    },
+    "trEaes": {
+      "id": 1,
+      "name": "example",
+      "shortName": null
+    },
+    "trRf": {
+      "id": 1,
+      "name": "example",
+      "shortName": null
+    },
+    "vpRf": {
+      "id": 1,
+      "name": "example",
+      "shortName": null
+    }
+  },
+  "docTypeGroups": {
+    "conclusionResearchProjectProduction": {
+      "id": 1,
+      "name": "example"
+    },
+    "conclusionResearchTypeProduction": {
+      "id": 1,
+      "name": "example"
+    },
+    "declarationProductType": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "docTypes": {
+    "acceptanceTestProgram": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "acceptanceTestReport": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "actAnalysisConditionManufacture": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "actOfReadinessOfAProductSampleForAcceptanceTests": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "actSampling": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "actionPlanToEliminateTheIdentifiedByTheAcceptanceCommittee": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "certificateOfConformityForMaterialsAndComponents": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "componentSafetyDocuments": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "conclusionResearchProjectProduction": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "conclusionResearchTypeProduction": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "contractCertificationProducts": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "contractPerformanceFunctionsForeignManufacturer": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "contractShippingDocuments": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "datasheet": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "decisionApplicationCertification": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "declarationProductType": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "declarationQualityManagementSystem": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "declarationRawMaterialsComponents": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "designDocumentation": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "docAssignIdToVehicleManufacturer": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "documentAccordingToWhichTheProductsAreManufactured": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "documentConfirmingTheCharacteristicsOfMaterialsAndComponents": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "documentRequirements": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "documentsConfirmingTheConformityOfComponents": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "documentsOnConfirmationOfConformityReceivedFromForeignCertificationBodies": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "listOfStandards": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "otherDocuments": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "otherDocumentsFromApplicant": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "periodicAndTypeTestReports": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "preTestProgram": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "productionControlAnalysisReport": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "productsOriginCertificate": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "protocolTestingTechnicalService": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "qualificationCommissionAct": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "qualityPassport": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "questionnaireForAssessingTheStateOfProduction": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "registrationDocuments": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "reportsOnTypeApprovalUnderUNRegulation": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "resultsOfStrengthCalculations": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "riskAnalysisAct": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "safetyRationale": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "setOfAccountedOperationalDocumentation": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "technicalDocumentation": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "termsOfReferenceForTheCreationOfaProductSample": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "testReport": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "testReportTestingLaboratory": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "vehicleChassisTypeApproval": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    },
+    "veterinaryAndSanitaryExaminationResults": {
+      "id": 1,
+      "name": "example",
+      "idGroup": 1
+    }
+  },
+  "legalSubjectTypes": {
+    "IndividualPerson": {
+      "id": 1,
+      "name": "example"
+    },
+    "foreignPerson": {
+      "id": 1,
+      "name": "example"
+    },
+    "individualEntrepreneur": {
+      "id": 1,
+      "name": "example"
+    },
+    "legalEntity": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "normDocStatuses": {
+    "absentInFund": {
+      "id": 1,
+      "name": "example"
+    },
+    "accepted": {
+      "id": 1,
+      "name": "example"
+    },
+    "active": {
+      "id": 1,
+      "name": "example"
+    },
+    "activeAsAmended": {
+      "id": 1,
+      "name": "example"
+    },
+    "activeInBY": {
+      "id": 1,
+      "name": "example"
+    },
+    "activeOnlyInRU": {
+      "id": 1,
+      "name": "example"
+    },
+    "approved": {
+      "id": 1,
+      "name": "example"
+    },
+    "canceled": {
+      "id": 1,
+      "name": "example"
+    },
+    "expired": {
+      "id": 1,
+      "name": "example"
+    },
+    "repealed": {
+      "id": 1,
+      "name": "example"
+    },
+    "repealedInRf": {
+      "id": 1,
+      "name": "example"
+    },
+    "replaced": {
+      "id": 1,
+      "name": "example"
+    },
+    "unverified": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "normDocTypes": {
+    "technicalReglamentEaes": {
+      "id": 1,
+      "name": "example"
+    },
+    "technicalReglamentRf": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "normDocs": {
+    "conformityAssessmentDeclarationSchemes": [
+      {
+        "id": 1,
+        "name": "example",
+        "docDesignation": null
+      },
+      {
+        "id": 1,
+        "name": "example",
+        "docDesignation": null
+      }
+    ],
+    "conformityAssessmentTypicalSchemeEaes": {
+      "id": 1,
+      "name": "example",
+      "docDesignation": null
+    },
+    "productCertificationProcedureRf": {
+      "id": 1,
+      "name": "example",
+      "docDesignation": null
+    },
+    "regCement": {
+      "id": 1,
+      "name": "example",
+      "docDesignation": null
+    },
+    "regInsulationMaterials": {
+      "id": 1,
+      "name": "example",
+      "docDesignation": null
+    },
+    "regVaccinesForAnimals": {
+      "id": 1,
+      "name": "example",
+      "docDesignation": null
+    }
+  },
+  "notActiveId": 1,
+  "oksm": {
+    "russia": {
+      "id": "example",
+      "name": "example",
+      "alpha2": "example",
+      "shortName": null
+    }
+  },
+  "ralType": {
+    "typeAL": {
+      "id": 1,
+      "name": "example"
+    },
+    "typeActivityAl": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "replacementReason": {
+    "changeAddresses": {
+      "id": 1,
+      "name": "example"
+    },
+    "changeCode": {
+      "id": 1,
+      "name": "example"
+    },
+    "changeContactInfoApp": {
+      "id": 1,
+      "name": "example"
+    },
+    "changeLegalFormApp": {
+      "id": 1,
+      "name": "example"
+    },
+    "changeLegalFormMan": {
+      "id": 1,
+      "name": "example"
+    },
+    "changeLegalName": {
+      "id": 1,
+      "name": "example"
+    },
+    "changeLocationApp": {
+      "id": 1,
+      "name": "example"
+    },
+    "changeLocationMan": {
+      "id": 1,
+      "name": "example"
+    },
+    "identifyingMistakes": {
+      "id": 1,
+      "name": "example"
+    },
+    "reducingAddresses": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "scanCopyTypes": {
+    "contract": {
+      "id": 1,
+      "name": "example"
+    },
+    "contractAccredPerson": {
+      "id": 1,
+      "name": "example"
+    },
+    "declaration": {
+      "id": 1,
+      "name": "example"
+    },
+    "gov": {
+      "id": 1,
+      "name": "example"
+    },
+    "other": {
+      "id": 1,
+      "name": "example"
+    },
+    "proof": {
+      "id": 1,
+      "name": "example"
+    },
+    "values": {
+      "1": "example",
+      "2": "example",
+      "3": "example",
+      "4": "example",
+      "5": "example",
+      "6": "example"
+    }
+  },
+  "status": {
+    "active": {
+      "id": 6,
+      "name": "example",
+      "masterId": null
+    },
+    "archival": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "canceled": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "deleted": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "draft": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "extended": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "notActive": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "notificationSent": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "partSuspended": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "prescriptionIssued": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "resumed": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "send": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "suspended": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    },
+    "waiting": {
+      "id": 1,
+      "name": "example",
+      "masterId": null
+    }
+  },
+  "statusChangeReason": {
+    "reasonByCourt": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "statusTestingLabs": {
+    "aLTestingLabs": {
+      "id": 1,
+      "name": "example"
+    },
+    "noTestingLabs": {
+      "id": 1,
+      "name": "example"
+    },
+    "otherTestingLabs": {
+      "id": 1,
+      "name": "example"
+    },
+    "pLTestingLabs": {
+      "id": 1,
+      "name": "example"
+    },
+    "rpiTestingLabs": {
+      "id": 1,
+      "name": "example"
+    }
+  },
+  "suspendedId": 1,
+  "validationForms": {
+    "certification": {
+      "id": 1,
+      "name": "example"
+    },
+    "certificationOrDeclaration": {
+      "id": 1,
+      "name": "example"
+    },
+    "declaration": {
+      "id": 1,
+      "name": "example"
+    }
+  }
+}

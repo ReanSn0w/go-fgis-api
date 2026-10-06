@@ -1,0 +1,619 @@
+{
+  "accreditationBody": null,
+  "annexes": [
+    {
+      "idAnnex": 1,
+      "idType": 1,
+      "ord": "1",
+      "pageCount": 1
+    }
+  ],
+  "applicant": {
+    "addlRegInfo": "example",
+    "addresses": [
+      {
+        "flat": null,
+        "foreignCity": null,
+        "foreignDistrict": null,
+        "foreignHouse": null,
+        "foreignLocality": null,
+        "foreignStreet": null,
+        "fullAddress": "example",
+        "gln": null,
+        "glonass": null,
+        "idAddrType": 1,
+        "idAddress": 1,
+        "idCity": null,
+        "idCodeOksm": "example",
+        "idDistrict": null,
+        "idHouse": null,
+        "idLocality": null,
+        "idStreet": null,
+        "idSubject": null,
+        "oksmShort": true,
+        "otherGln": null,
+        "postCode": null,
+        "uniqueAddress": null
+      },
+      {
+        "flat": null,
+        "foreignCity": null,
+        "foreignDistrict": null,
+        "foreignHouse": null,
+        "foreignLocality": null,
+        "foreignStreet": null,
+        "fullAddress": "example",
+        "gln": null,
+        "glonass": null,
+        "idAddrType": 1,
+        "idAddress": 1,
+        "idCity": null,
+        "idCodeOksm": "example",
+        "idDistrict": null,
+        "idHouse": null,
+        "idLocality": null,
+        "idStreet": null,
+        "idSubject": "example",
+        "oksmShort": true,
+        "otherGln": null,
+        "postCode": "example",
+        "uniqueAddress": null
+      }
+    ],
+    "applicantHead": false,
+    "contacts": [
+      {
+        "idContact": 1,
+        "idContactType": 1,
+        "value": "example"
+      },
+      {
+        "idContact": 1,
+        "idContactType": 1,
+        "value": "example"
+      }
+    ],
+    "firstName": "example",
+    "fullName": "example",
+    "headPosition": "example",
+    "idApplicantType": 1,
+    "idEgrul": null,
+    "idKopf": null,
+    "idLegalForm": 1,
+    "idLegalSubject": 1,
+    "idLegalSubjectType": 1,
+    "idPerson": 1,
+    "idResponsiblePerson": 1,
+    "inn": "example",
+    "isEecRegister": true,
+    "kpp": "example",
+    "nameLegalForm": "example",
+    "ogrn": "example",
+    "ogrnAssignDate": "2026-01-02",
+    "patronymic": "example",
+    "regDate": "2026-01-02",
+    "regOrganName": "example",
+    "responsibleContacts": [],
+    "responsibleDocDate": null,
+    "responsibleDocName": null,
+    "responsibleDocNumber": null,
+    "responsibleFirstName": "example",
+    "responsiblePatronymic": "example",
+    "responsiblePosition": "example",
+    "responsibleSurname": "example",
+    "shortName": "example",
+    "snils": "example",
+    "surname": "example",
+    "transnational": []
+  },
+  "applicantFilials": [],
+  "applicationDate": null,
+  "applicationNumber": null,
+  "applicationSubmissionDate": null,
+  "assignRegNumber": false,
+  "awaitForApprove": false,
+  "certificationAuthority": null,
+  "changePublishDate": "2026-01-02T03:04:05",
+  "changes": null,
+  "declEndDate": "2026-01-02",
+  "declRegDate": "2026-01-02",
+  "declStage": {
+    "idStage": 1,
+    "isValid": true
+  },
+  "declarationRegInsteadNum": null,
+  "declarationReplacedNum": null,
+  "documents": {
+    "applicantOtherDocuments": [],
+    "commonDocuments": {},
+    "complianceStandards": [],
+    "componentCertificates": [],
+    "foreignManufacturerContract": null,
+    "productTypeApplicationDecision": null,
+    "productTypeCertificates": [
+      {
+        "accreditedPersonName": null,
+        "annex": null,
+        "attestatEndDate": null,
+        "attestatRegDate": null,
+        "attestatRegNumber": null,
+        "idAccredPlace": null,
+        "idFile": null,
+        "idPtCertificate": 1,
+        "idTechnicalRegulation": 1,
+        "isAccredEec": false,
+        "issueDate": null,
+        "number": null,
+        "sampleProduct": null
+      }
+    ],
+    "productTypeContract": null,
+    "productTypeResearchConclusion": null,
+    "productionControlResults": [],
+    "protocolTestingTechnicalService": null,
+    "qmsCertificates": [],
+    "reportsOnTypeApprovalUnderUNRegulation": [],
+    "vehicleChassisTypeApproval": null
+  },
+  "draftCreationDate": "2026-01-02T03:04:05",
+  "editApp": false,
+  "experts": [],
+  "firstName": null,
+  "functions": null,
+  "idApplication": null,
+  "idApplicationStatus": null,
+  "idDeclScheme": 1,
+  "idDeclType": 1,
+  "idDeclaration": 1,
+  "idDeclarationChecker": null,
+  "idDeclarationRegInstead": null,
+  "idDeclarationReplaced": null,
+  "idGroups": [
+    1
+  ],
+  "idMrpa": "example",
+  "idObjectDeclType": 1,
+  "idProductSingleLists": [],
+  "idReplacementReason": [],
+  "idSigner": null,
+  "idSignerEmployee": null,
+  "idStatus": 6,
+  "idStatusTestingLabs": 1,
+  "idTechnicalReglaments": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "isSrd": true,
+  "lastUpdate": "2026-01-02T03:04:05",
+  "manufIsApplicant": true,
+  "manufacturer": {
+    "addlRegInfo": "example",
+    "addresses": [
+      {
+        "flat": null,
+        "foreignCity": null,
+        "foreignDistrict": null,
+        "foreignHouse": null,
+        "foreignLocality": null,
+        "foreignStreet": null,
+        "fullAddress": "example",
+        "gln": null,
+        "glonass": null,
+        "idAddrType": 1,
+        "idAddress": 1,
+        "idCity": null,
+        "idCodeOksm": "example",
+        "idDistrict": null,
+        "idHouse": null,
+        "idLocality": null,
+        "idStreet": null,
+        "idSubject": null,
+        "oksmShort": true,
+        "otherGln": null,
+        "postCode": null,
+        "uniqueAddress": null
+      }
+    ],
+    "applicantHead": false,
+    "contacts": [
+      {
+        "idContact": 1,
+        "idContactType": 1,
+        "value": "example"
+      },
+      {
+        "idContact": 1,
+        "idContactType": 1,
+        "value": "example"
+      }
+    ],
+    "firstName": "example",
+    "fullName": "example",
+    "headPosition": "example",
+    "idEgrul": null,
+    "idKopf": null,
+    "idLegalForm": 1,
+    "idLegalSubject": 1,
+    "idLegalSubjectType": 1,
+    "idPerson": 1,
+    "idResponsiblePerson": null,
+    "inn": "example",
+    "isEecRegister": true,
+    "kpp": "example",
+    "nameLegalForm": "example",
+    "ogrn": "example",
+    "ogrnAssignDate": "2026-01-02",
+    "patronymic": "example",
+    "regDate": "2026-01-02",
+    "regOrganName": "example",
+    "responsibleContacts": null,
+    "responsibleDocDate": null,
+    "responsibleDocName": null,
+    "responsibleDocNumber": null,
+    "responsibleFirstName": null,
+    "responsiblePatronymic": null,
+    "responsiblePosition": null,
+    "responsibleSurname": null,
+    "shortName": "example",
+    "snils": "example",
+    "surname": "example",
+    "transnational": []
+  },
+  "manufacturerFilials": [
+    {
+      "addresses": [
+        {
+          "flat": null,
+          "foreignCity": null,
+          "foreignDistrict": null,
+          "foreignHouse": null,
+          "foreignLocality": null,
+          "foreignStreet": null,
+          "fullAddress": "example",
+          "gln": null,
+          "glonass": null,
+          "idAddrType": 1,
+          "idAddress": 1,
+          "idCity": null,
+          "idCodeOksm": "example",
+          "idDistrict": null,
+          "idHouse": null,
+          "idLocality": null,
+          "idStreet": null,
+          "idSubject": "example",
+          "oksmShort": true,
+          "otherGln": null,
+          "postCode": "example",
+          "uniqueAddress": null
+        }
+      ],
+      "annex": false,
+      "contacts": [],
+      "egrulSelected": false,
+      "fullName": null,
+      "idFilial": 1,
+      "idKopf": null,
+      "idLegalForm": null,
+      "kpp": null,
+      "nameLegalForm": null,
+      "shortName": null
+    }
+  ],
+  "noSanction": true,
+  "number": "TEST-001",
+  "patronymic": null,
+  "product": {
+    "batchId": null,
+    "batchSize": null,
+    "fullName": "example",
+    "idProduct": 1,
+    "idProductOrigin": "643",
+    "identification": null,
+    "identifications": [
+      {
+        "amount": null,
+        "annex": true,
+        "article": null,
+        "description": null,
+        "documents": [
+          {
+            "date": null,
+            "idProductionDocument": 1,
+            "name": "example",
+            "number": null
+          }
+        ],
+        "expiryDate": null,
+        "factoryNumber": null,
+        "gtin": [
+          "example"
+        ],
+        "idIdentification": 1,
+        "idOkei": null,
+        "idOkpds": [
+          102
+        ],
+        "idTnveds": [
+          101
+        ],
+        "lifeTime": null,
+        "model": null,
+        "name": "example",
+        "productionDate": null,
+        "sort": null,
+        "standards": [],
+        "storageTime": null,
+        "tradeMark": null,
+        "type": null
+      },
+      {
+        "amount": null,
+        "annex": true,
+        "article": null,
+        "description": null,
+        "documents": [
+          {
+            "date": null,
+            "idProductionDocument": 1,
+            "name": "example",
+            "number": null
+          }
+        ],
+        "expiryDate": null,
+        "factoryNumber": null,
+        "gtin": [
+          "example"
+        ],
+        "idIdentification": 1,
+        "idOkei": null,
+        "idOkpds": [
+          102
+        ],
+        "idTnveds": [
+          101
+        ],
+        "lifeTime": null,
+        "model": null,
+        "name": "example",
+        "productionDate": null,
+        "sort": null,
+        "standards": [],
+        "storageTime": null,
+        "tradeMark": null,
+        "type": null
+      },
+      {
+        "amount": null,
+        "annex": true,
+        "article": null,
+        "description": null,
+        "documents": [
+          {
+            "date": null,
+            "idProductionDocument": 1,
+            "name": "example",
+            "number": null
+          }
+        ],
+        "expiryDate": null,
+        "factoryNumber": null,
+        "gtin": [
+          "example"
+        ],
+        "idIdentification": 1,
+        "idOkei": null,
+        "idOkpds": [
+          102
+        ],
+        "idTnveds": [
+          101
+        ],
+        "lifeTime": null,
+        "model": null,
+        "name": "example",
+        "productionDate": null,
+        "sort": null,
+        "standards": [],
+        "storageTime": null,
+        "tradeMark": null,
+        "type": null
+      },
+      {
+        "amount": null,
+        "annex": true,
+        "article": null,
+        "description": null,
+        "documents": [
+          {
+            "date": null,
+            "idProductionDocument": 1,
+            "name": "example",
+            "number": null
+          }
+        ],
+        "expiryDate": null,
+        "factoryNumber": null,
+        "gtin": [
+          "example"
+        ],
+        "idIdentification": 1,
+        "idOkei": null,
+        "idOkpds": [
+          102
+        ],
+        "idTnveds": [
+          101
+        ],
+        "lifeTime": null,
+        "model": null,
+        "name": "example",
+        "productionDate": null,
+        "sort": null,
+        "standards": [],
+        "storageTime": null,
+        "tradeMark": null,
+        "type": null
+      },
+      {
+        "amount": null,
+        "annex": true,
+        "article": null,
+        "description": null,
+        "documents": [
+          {
+            "date": null,
+            "idProductionDocument": 1,
+            "name": "example",
+            "number": null
+          }
+        ],
+        "expiryDate": null,
+        "factoryNumber": null,
+        "gtin": [
+          "example"
+        ],
+        "idIdentification": 1,
+        "idOkei": null,
+        "idOkpds": [
+          102
+        ],
+        "idTnveds": [
+          101
+        ],
+        "lifeTime": null,
+        "model": null,
+        "name": "example",
+        "productionDate": null,
+        "sort": null,
+        "standards": [],
+        "storageTime": null,
+        "tradeMark": null,
+        "type": null
+      },
+      {
+        "amount": null,
+        "annex": true,
+        "article": null,
+        "description": null,
+        "documents": [
+          {
+            "date": null,
+            "idProductionDocument": 1,
+            "name": "example",
+            "number": null
+          }
+        ],
+        "expiryDate": null,
+        "factoryNumber": null,
+        "gtin": [
+          "example"
+        ],
+        "idIdentification": 1,
+        "idOkei": null,
+        "idOkpds": [
+          102
+        ],
+        "idTnveds": [
+          101
+        ],
+        "lifeTime": null,
+        "model": null,
+        "name": "example",
+        "productionDate": null,
+        "sort": null,
+        "standards": [],
+        "storageTime": null,
+        "tradeMark": null,
+        "type": null
+      }
+    ],
+    "marking": null,
+    "storageCondition": "example",
+    "usageCondition": null,
+    "usageScope": null
+  },
+  "publishDate": "2026-01-02T03:04:05",
+  "scanCopy": [
+    {
+      "idFile": "example",
+      "idType": 1,
+      "name": "example"
+    },
+    {
+      "idFile": "example",
+      "idType": 1,
+      "name": "example"
+    }
+  ],
+  "showInOpenPart": true,
+  "snils": null,
+  "statusChanges": [
+    {
+      "beginDate": "2026-01-02T03:04:05",
+      "comment": null,
+      "docDate": null,
+      "docName": null,
+      "docNumber": null,
+      "endDate": null,
+      "idBasis": null,
+      "idBasisSolutions": [],
+      "idChangeStatus": 1,
+      "idFileScan": null,
+      "idMrpa": null,
+      "idOngoingEvent": null,
+      "idStatus": 6,
+      "levelStateControl": null,
+      "lkType": null,
+      "prescription": null,
+      "publicated": true,
+      "publishDate": "2026-01-02T03:04:05",
+      "typeStateControl": null
+    }
+  ],
+  "submissionDate": null,
+  "surname": null,
+  "tempNumber": "TEST-001",
+  "testingLabs": [
+    {
+      "accredEec": true,
+      "address": null,
+      "annex": false,
+      "basis": null,
+      "beginDate": "2026-01-02",
+      "docConfirmCustom": [
+        {
+          "customInfo": [],
+          "idDocConfirmCustom": 1,
+          "idDocConfirmCustomType": 1,
+          "otherDocs": [],
+          "reasonNonRegistrCustomsDeclaration": "example"
+        }
+      ],
+      "endDate": null,
+      "fullName": "example",
+      "idAccredPlace": "643",
+      "idRal": 1,
+      "idTestingLab": 1,
+      "importedForResearchTesting": false,
+      "inn": null,
+      "isAccredEec": true,
+      "ogrn": null,
+      "protocols": [
+        {
+          "date": "2026-01-02",
+          "idFile": "example",
+          "idProtocol": 1,
+          "idProtocolRpi": 1,
+          "isProtocolInvalid": false,
+          "number": "TEST-001",
+          "standards": []
+        }
+      ],
+      "regNumber": "TEST-001"
+    }
+  ],
+  "unpublishedChanges": false,
+  "violationPublishDate": null
+}
