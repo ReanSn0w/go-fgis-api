@@ -24,9 +24,8 @@ type ColumnSort struct {
 	Sort   string `json:"sort"`
 }
 
-// DeclarationFilter follows the request captured for the declaration list.
-// The precise shape of non-empty columnsSearch entries has not been observed,
-// so RawMessage keeps those entries available without inventing a schema.
+// DeclarationFilter follows the observed declaration list requests. RawMessage
+// preserves compatibility with callers that supply custom search conditions.
 type DeclarationFilter struct {
 	Status           []int             `json:"status"`
 	IDDeclType       []int             `json:"idDeclType"`
@@ -150,8 +149,8 @@ type Declaration struct {
 	TestLabProtocolNumber              string `json:"testLabProtocolNumber"`
 }
 
-// CertificateSearchRequest models the confirmed list envelope. The attached
-// HAR does not contain a certificate search, so Filter remains extensible.
+// CertificateSearchRequest is the original extensible search form. For the
+// observed certificate filter and typed rows, use CertificateQuery instead.
 type CertificateSearchRequest struct {
 	Size        int            `json:"size"`
 	Page        int            `json:"page"`
@@ -160,8 +159,7 @@ type CertificateSearchRequest struct {
 	ColumnsSort []ColumnSort   `json:"columnsSort"`
 }
 
-// Certificate holds the raw fields returned by a certificate list row until
-// a real certificate response can establish their names and types.
+// Certificate keeps the original raw list-row API for compatibility.
 type Certificate map[string]json.RawMessage
 
 // CertificateSummary is the observed certificate list-row schema. Nullable

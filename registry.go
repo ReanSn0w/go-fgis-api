@@ -14,8 +14,8 @@ func (c *Client) SearchDeclarations(ctx context.Context, query DeclarationSearch
 	return postList[Declaration](ctx, c, declarations, "/rds/declaration", query)
 }
 
-// SearchCertificates uses an extensible request and raw row fields because a
-// certificate list response was not present in the supplied capture.
+// SearchCertificates preserves the original extensible request and raw rows.
+// Use SearchCertificateSummaries for the observed typed request and row shape.
 func (c *Client) SearchCertificates(ctx context.Context, query CertificateSearchRequest) (Page[Certificate], error) {
 	return postList[Certificate](ctx, c, certificates, "/rss/certificate", query)
 }
@@ -111,7 +111,7 @@ func requestJSON[T any](ctx context.Context, c *Client, method, path, referer st
 			return result, fmt.Errorf("decode FGIS response: %w", err)
 		}
 		if closeErr != nil {
-			return result, fmt.Errorf("close FGIS list response: %w", closeErr)
+			return result, fmt.Errorf("close FGIS response: %w", closeErr)
 		}
 		return result, nil
 	}
