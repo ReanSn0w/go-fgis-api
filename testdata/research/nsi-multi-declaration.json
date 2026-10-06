@@ -1,0 +1,170 @@
+{
+  "validationFormNormDoc": [
+    {
+      "id": 1,
+      "masterId": "example",
+      "docNum": "example",
+      "name": "example"
+    },
+    {
+      "id": 1,
+      "masterId": "example",
+      "docNum": "example",
+      "name": "example"
+    },
+    {
+      "id": 1,
+      "masterId": "example",
+      "docNum": "example",
+      "name": "example"
+    },
+    {
+      "id": 1,
+      "masterId": "example",
+      "docNum": "example",
+      "name": "example"
+    }
+  ],
+  "validationScheme2": [
+    {
+      "isApplicantProvider": false,
+      "isPresenceOfProxy": true,
+      "name": "example",
+      "isApplicantEeuMember": true,
+      "masterId": "example",
+      "isApplicantForeign": true,
+      "isOneOffProductTesting": false,
+      "isAccreditationLab": true,
+      "isBatchProductTesting": false,
+      "validityTerm": 1,
+      "isProductSampleTesting": true,
+      "isBatchProduction": false,
+      "isSeriesProduction": true,
+      "id": 1,
+      "isApplicantManufacturer": true,
+      "isOneOffProduction": false
+    }
+  ],
+  "validationObjectType": [
+    {
+      "masterId": "example",
+      "id": 1,
+      "name": "example"
+    }
+  ],
+  "conformityDocType": [
+    {
+      "id": 1,
+      "name": "example"
+    }
+  ],
+  "status": [
+    {
+      "masterId": "example",
+      "id": 1,
+      "name": "example"
+    }
+  ],
+  "annexType": [
+    {
+      "name": "example",
+      "masterId": "example",
+      "id": 1
+    }
+  ],
+  "oksm": [
+    {
+      "name": "example",
+      "shortName": "example",
+      "id": "example",
+      "masterId": 1,
+      "eeuMember": true,
+      "alpha2": "example"
+    }
+  ],
+  "declarantType": [
+    {
+      "name": "example",
+      "masterId": "example",
+      "id": 1
+    }
+  ],
+  "applicantType": [
+    {
+      "id": 1,
+      "name": "example",
+      "masterId": "example"
+    }
+  ],
+  "legalForm": [
+    {
+      "id": 1,
+      "name": "example"
+    }
+  ],
+  "contactType": [
+    {
+      "name": "example",
+      "masterId": "example",
+      "id": 1
+    },
+    {
+      "name": "example",
+      "masterId": "example",
+      "id": 1
+    }
+  ],
+  "addressType": [
+    {
+      "name": "example",
+      "id": 1,
+      "masterId": "example"
+    },
+    {
+      "name": "example",
+      "id": 1,
+      "masterId": "example"
+    }
+  ],
+  "fiasAddrobj": [
+    {
+      "shortname": "example",
+      "id": "example",
+      "aolevel": 1,
+      "masterId": "example",
+      "offname": "example"
+    }
+  ],
+  "okpd2": [
+    {
+      "code": "0000000000",
+      "name": "example",
+      "id": 1,
+      "hidden": false
+    }
+  ],
+  "tnved": [
+    {
+      "hidden": false,
+      "code": "0000000000",
+      "id": 1,
+      "name": "example",
+      "masterId": "example"
+    }
+  ],
+  "testingStatus": [
+    {
+      "name": "example",
+      "masterId": "example",
+      "id": 1
+    }
+  ],
+  "techregProductListEEU": [
+    {
+      "name": "example",
+      "id": 1,
+      "hidden": false,
+      "techRegId": 1
+    }
+  ]
+}
