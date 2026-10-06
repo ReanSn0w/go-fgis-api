@@ -19,7 +19,7 @@ import (
 func (c *Client) Authenticate(ctx context.Context) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if c.closed {
+	if c.closed.Load() {
 		return ErrClosed
 	}
 	return c.authenticateLocked(ctx)
@@ -28,7 +28,7 @@ func (c *Client) Authenticate(ctx context.Context) error {
 func (c *Client) ensureToken(ctx context.Context) (string, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if c.closed {
+	if c.closed.Load() {
 		return "", ErrClosed
 	}
 	if err := c.ensureTokenLocked(ctx); err != nil {
@@ -54,7 +54,7 @@ func (c *Client) ensureTokenLocked(ctx context.Context) error {
 func (c *Client) refreshAfterUnauthorized(ctx context.Context, failedToken string) (string, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if c.closed {
+	if c.closed.Load() {
 		return "", ErrClosed
 	}
 	if c.token != failedToken && c.token != "" {
@@ -197,7 +197,7 @@ func (c *Client) refreshLoop(ctx context.Context, done chan struct{}) {
 		case <-timer.C:
 		}
 		c.mu.Lock()
-		if c.closed || ctx.Err() != nil {
+		if c.closed.Load() || ctx.Err() != nil {
 			c.mu.Unlock()
 			return
 		}

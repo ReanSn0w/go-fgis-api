@@ -22,6 +22,9 @@ func (c *Client) SearchCertificates(ctx context.Context, query CertificateSearch
 
 func postList[T any](ctx context.Context, c *Client, path, referer string, query any) (Page[T], error) {
 	var result Page[T]
+	if c.closed.Load() {
+		return result, ErrClosed
+	}
 	payload, err := json.Marshal(query)
 	if err != nil {
 		return result, fmt.Errorf("encode search request: %w", err)
