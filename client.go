@@ -3,17 +3,14 @@
 package fgis
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -24,6 +21,12 @@ const (
 	certificates   = "/api/v1/rss/common/certificates/get"
 )
 
+// Credentials contains the login payload. Keep these values out of logs.
+type Credentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 // Config contains credentials used by the site's login endpoint. Keep them in
 // a secret store or environment variables; do not commit them to source code.
 type Config struct {
@@ -32,6 +35,15 @@ type Config struct {
 	Username   string
 	Password   string
 	HTTPClient *http.Client
+
+	// CredentialsProvider takes precedence over Username and Password and is
+	// called for every login. It must respect cancellation of ctx.
+	CredentialsProvider func(context.Context) (Credentials, error)
+	// RefreshBefore defaults to five minutes. Negative values are invalid.
+	RefreshBefore time.Duration
+	// OnRefreshError runs in the background loop. It must not call Close
+	// synchronously, because Close waits for that loop to exit.
+	OnRefreshError func(error)
 }
 
 // Client maintains the site's session cookie and Bearer token in memory.
@@ -39,12 +51,19 @@ type Config struct {
 type Client struct {
 	base       *url.URL
 	startPath  string
-	username   string
-	password   string
 	httpClient *http.Client
 
-	mu    sync.Mutex
-	token string
+	credentials         Credentials
+	credentialsProvider func(context.Context) (Credentials, error)
+	refreshBefore       time.Duration
+	onRefreshError      func(error)
+	wake                chan struct{}
+	closed              atomic.Bool
+
+	mu        sync.Mutex
+	token     string
+	expiresAt time.Time
+	refreshAt time.Time
 }
 
 // New creates a client. If HTTPClient has no cookie jar, New installs one on
@@ -69,6 +88,14 @@ func New(cfg Config) (*Client, error) {
 		return nil, fmt.Errorf("start path must begin with slash")
 	}
 
+	refreshBefore := cfg.RefreshBefore
+	if refreshBefore < 0 {
+		return nil, fmt.Errorf("refresh before must not be negative")
+	}
+	if refreshBefore == 0 {
+		refreshBefore = 5 * time.Minute
+	}
+
 	hc := &http.Client{Timeout: 30 * time.Second}
 	if cfg.HTTPClient != nil {
 		copy := *cfg.HTTPClient
@@ -86,189 +113,19 @@ func New(cfg Config) (*Client, error) {
 	}
 
 	return &Client{
-		base:       base,
-		startPath:  startPath,
-		username:   cfg.Username,
-		password:   cfg.Password,
-		httpClient: hc,
+		base:                base,
+		startPath:           startPath,
+		httpClient:          hc,
+		credentials:         Credentials{Username: cfg.Username, Password: cfg.Password},
+		credentialsProvider: cfg.CredentialsProvider,
+		refreshBefore:       refreshBefore,
+		onRefreshError:      cfg.OnRefreshError,
+		wake:                make(chan struct{}, 1),
 	}, nil
-}
-
-// Authenticate creates a site session and obtains the Bearer token returned
-// by POST /login in the Authorization response header.
-func (c *Client) Authenticate(ctx context.Context) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	return c.authenticateLocked(ctx)
-}
-
-func (c *Client) authenticateLocked(ctx context.Context) error {
-	if c.username == "" || c.password == "" {
-		return errors.New("FGIS username and password are required")
-	}
-
-	pageURL := c.endpoint(c.startPath)
-	bootstrapReq, err := http.NewRequestWithContext(ctx, http.MethodGet, pageURL, nil)
-	if err != nil {
-		return fmt.Errorf("create bootstrap request: %w", err)
-	}
-	setNavigationHeaders(bootstrapReq)
-	bootstrapResp, err := c.httpClient.Do(bootstrapReq)
-	if err != nil {
-		return fmt.Errorf("load registry page: %w", err)
-	}
-	_, readErr := io.Copy(io.Discard, bootstrapResp.Body)
-	closeErr := bootstrapResp.Body.Close()
-	if readErr != nil {
-		return fmt.Errorf("read registry page response: %w", readErr)
-	}
-	if closeErr != nil {
-		return fmt.Errorf("close registry page response: %w", closeErr)
-	}
-	if bootstrapResp.StatusCode < 200 || bootstrapResp.StatusCode >= 300 {
-		return &HTTPError{Method: http.MethodGet, Path: c.startPath, StatusCode: bootstrapResp.StatusCode}
-	}
-
-	loginBody, err := json.Marshal(struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}{Username: c.username, Password: c.password})
-	if err != nil {
-		return fmt.Errorf("encode login request: %w", err)
-	}
-	loginURL := c.endpoint(loginPath)
-	loginReq, err := http.NewRequestWithContext(ctx, http.MethodPost, loginURL, bytes.NewReader(loginBody))
-	if err != nil {
-		return fmt.Errorf("create login request: %w", err)
-	}
-	setBrowserHeaders(loginReq, c.base, pageURL)
-	loginReq.Header.Set("Authorization", "Bearer null")
-	loginReq.Header.Set("Content-Type", "application/json")
-	loginResp, err := c.httpClient.Do(loginReq)
-	if err != nil {
-		return fmt.Errorf("send login request: %w", err)
-	}
-	_, readErr = io.Copy(io.Discard, loginResp.Body)
-	closeErr = loginResp.Body.Close()
-	if readErr != nil {
-		return fmt.Errorf("read login response: %w", readErr)
-	}
-	if closeErr != nil {
-		return fmt.Errorf("close login response: %w", closeErr)
-	}
-	if loginResp.StatusCode < 200 || loginResp.StatusCode >= 300 {
-		return &HTTPError{Method: http.MethodPost, Path: loginPath, StatusCode: loginResp.StatusCode}
-	}
-
-	authorization := loginResp.Header.Get("Authorization")
-	scheme, token, ok := strings.Cut(authorization, " ")
-	if !ok || !strings.EqualFold(scheme, "Bearer") || token == "" || strings.EqualFold(token, "null") {
-		return errors.New("login succeeded without a Bearer token in the Authorization response header")
-	}
-	c.token = authorization
-	return nil
-}
-
-// SearchDeclarations submits a caller-provided JSON search body to the
-// declaration registry and returns its page envelope.
-func (c *Client) SearchDeclarations(ctx context.Context, body any) (ListResponse[json.RawMessage], error) {
-	return postList[json.RawMessage](ctx, c, declarations, body)
-}
-
-// SearchCertificates submits a caller-provided JSON search body to the
-// certificate registry and returns its page envelope.
-func (c *Client) SearchCertificates(ctx context.Context, body any) (ListResponse[json.RawMessage], error) {
-	return postList[json.RawMessage](ctx, c, certificates, body)
-}
-
-// ListResponse is the common list envelope returned by registry endpoints.
-type ListResponse[T any] struct {
-	Items []T `json:"items"`
-	Size  int `json:"size"`
-	Total int `json:"total"`
-}
-
-// HTTPError describes an upstream HTTP error without including response
-// bodies, which can contain credentials or personal data.
-type HTTPError struct {
-	Method     string
-	Path       string
-	StatusCode int
-}
-
-func (e *HTTPError) Error() string {
-	return fmt.Sprintf("FGIS %s %s returned HTTP %d", e.Method, e.Path, e.StatusCode)
-}
-
-func postList[T any](ctx context.Context, c *Client, path string, body any) (ListResponse[T], error) {
-	var result ListResponse[T]
-	if err := c.ensureAuthenticated(ctx); err != nil {
-		return result, err
-	}
-
-	payload, err := json.Marshal(body)
-	if err != nil {
-		return result, fmt.Errorf("encode search request: %w", err)
-	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.endpoint(path), bytes.NewReader(payload))
-	if err != nil {
-		return result, fmt.Errorf("create search request: %w", err)
-	}
-	setBrowserHeaders(req, c.base, c.endpoint(c.startPath))
-	req.Header.Set("Authorization", c.bearer())
-	req.Header.Set("Content-Type", "application/json")
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return result, fmt.Errorf("send search request: %w", err)
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		_, _ = io.Copy(io.Discard, resp.Body)
-		return result, &HTTPError{Method: http.MethodPost, Path: path, StatusCode: resp.StatusCode}
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return result, fmt.Errorf("decode FGIS list response: %w", err)
-	}
-	return result, nil
-}
-
-func (c *Client) ensureAuthenticated(ctx context.Context) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	if c.token != "" {
-		return nil
-	}
-	return c.authenticateLocked(ctx)
-}
-
-func (c *Client) bearer() string {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	return c.token
 }
 
 func (c *Client) endpoint(path string) string {
 	u := *c.base
 	u.Path = strings.TrimRight(c.base.Path, "/") + path
 	return u.String()
-}
-
-func setBrowserHeaders(req *http.Request, base *url.URL, referer string) {
-	req.Header.Set("Accept", "application/json, text/plain, */*")
-	req.Header.Set("Origin", base.Scheme+"://"+base.Host)
-	req.Header.Set("Referer", referer)
-	req.Header.Set("lkId", "")
-	req.Header.Set("orgId", "")
-	req.Header.Set("Sec-Fetch-Dest", "empty")
-	req.Header.Set("Sec-Fetch-Mode", "cors")
-	req.Header.Set("Sec-Fetch-Site", "same-origin")
-}
-
-func setNavigationHeaders(req *http.Request) {
-	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-	req.Header.Set("Upgrade-Insecure-Requests", "1")
-	req.Header.Set("Sec-Fetch-Dest", "document")
-	req.Header.Set("Sec-Fetch-Mode", "navigate")
-	req.Header.Set("Sec-Fetch-Site", "none")
-	req.Header.Set("Sec-Fetch-User", "?1")
 }
