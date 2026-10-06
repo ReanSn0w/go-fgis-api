@@ -64,6 +64,18 @@ type Client struct {
 	token     string
 	expiresAt time.Time
 	refreshAt time.Time
+
+	// Start is serialized separately from cancellation, so Close can cancel
+	// a login even while that login holds the authentication mutex.
+	startMu     sync.Mutex
+	lifecycleMu sync.Mutex
+	loop        *backgroundLoop
+}
+
+type backgroundLoop struct {
+	ctx    context.Context
+	cancel context.CancelFunc
+	done   chan struct{}
 }
 
 // New creates a client. If HTTPClient has no cookie jar, New installs one on
@@ -128,4 +140,76 @@ func (c *Client) endpoint(path string) string {
 	u := *c.base
 	u.Path = strings.TrimRight(c.base.Path, "/") + path
 	return u.String()
+}
+
+// Start obtains a token and starts one background refresh loop. A running
+// loop is reused; after its context is canceled, Start can start a new loop.
+func (c *Client) Start(ctx context.Context) error {
+	c.startMu.Lock()
+	defer c.startMu.Unlock()
+
+	for {
+		c.lifecycleMu.Lock()
+		if c.closed.Load() {
+			c.lifecycleMu.Unlock()
+			return ErrClosed
+		}
+		if err := ctx.Err(); err != nil {
+			c.lifecycleMu.Unlock()
+			return err
+		}
+		previous := c.loop
+		if previous != nil {
+			select {
+			case <-previous.done:
+				c.loop = nil
+			default:
+				c.lifecycleMu.Unlock()
+				if previous.ctx.Err() == nil {
+					return nil
+				}
+				select {
+				case <-previous.done:
+					continue
+				case <-ctx.Done():
+					return ctx.Err()
+				}
+			}
+		}
+		loopCtx, cancel := context.WithCancel(ctx)
+		loop := &backgroundLoop{ctx: loopCtx, cancel: cancel, done: make(chan struct{})}
+		c.loop = loop
+		c.lifecycleMu.Unlock()
+
+		_, err := c.ensureToken(loopCtx)
+		if c.closed.Load() {
+			err = ErrClosed
+		} else if err == nil {
+			err = loopCtx.Err()
+		}
+		if err != nil {
+			cancel()
+			close(loop.done)
+			return err
+		}
+		go c.refreshLoop(loopCtx, loop.done)
+		return nil
+	}
+}
+
+// Close permanently rejects new operations, cancels background work and waits
+// for it to finish. In-flight caller requests retain their own contexts.
+// Close is safe to call repeatedly, including before Start.
+func (c *Client) Close() error {
+	c.lifecycleMu.Lock()
+	c.closed.Store(true)
+	loop := c.loop
+	if loop != nil {
+		loop.cancel()
+	}
+	c.lifecycleMu.Unlock()
+	if loop != nil {
+		<-loop.done
+	}
+	return nil
 }
