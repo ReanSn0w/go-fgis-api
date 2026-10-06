@@ -26,6 +26,24 @@ func (c *Client) SearchCertificateSummaries(ctx context.Context, query Certifica
 	return postList[CertificateSummary](ctx, c, certificates, "/rss/certificate", query)
 }
 
+// GetDeclaration retrieves one complete public declaration card by registry ID.
+func (c *Client) GetDeclaration(ctx context.Context, id int64) (DeclarationDetails, error) {
+	path, err := detailPath("/api/v1/rds/common/declarations", id)
+	if err != nil {
+		return DeclarationDetails{}, err
+	}
+	return requestJSON[DeclarationDetails](ctx, c, http.MethodGet, path, fmt.Sprintf("/rds/declaration/view/%d/common", id), nil)
+}
+
+// GetCertificate retrieves one complete public certificate card by registry ID.
+func (c *Client) GetCertificate(ctx context.Context, id int64) (CertificateDetails, error) {
+	path, err := detailPath("/api/v1/rss/common/certificates", id)
+	if err != nil {
+		return CertificateDetails{}, err
+	}
+	return requestJSON[CertificateDetails](ctx, c, http.MethodGet, path, fmt.Sprintf("/rss/certificate/view/%d/baseInfo", id), nil)
+}
+
 func postList[T any](ctx context.Context, c *Client, path, referer string, query any) (Page[T], error) {
 	return requestJSON[Page[T]](ctx, c, http.MethodPost, path, referer, query)
 }
